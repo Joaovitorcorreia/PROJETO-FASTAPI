@@ -31,3 +31,25 @@ def criar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
 def listar_usuarios(db: Session = Depends(get_db)):
     usuarios = db.query(Usuario).all()
     return usuarios
+
+#alterar usuario
+@app.put("/usuarios/{usuario_id}", response_model=UsuarioResponse)
+def alterar_usuario(usuario_id: int, usuario: UsuarioCreate, db: Session = Depends(get_db)):
+    usuario_db = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if not usuario_db:
+        return {"error": "Usuário não encontrado"}
+    usuario_db.nome = usuario.nome
+    usuario_db.email = usuario.email
+    db.commit()
+    db.refresh(usuario_db)
+    return usuario_db
+
+#deletar usuario
+@app.delete("/usuarios/{usuario_id}")
+def deletar_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    usuario_db = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if not usuario_db:
+        return {"error": "Usuário não encontrado"}
+    db.delete(usuario_db)
+    db.commit()
+    return {"message": "Usuário deletado com sucesso"}
