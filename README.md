@@ -1,2 +1,3 @@
 # PROJETO-FASTAPI
-Um pequeno e simples projeto com Python e FastAPI
+Um pequeno e simples projeto com Python, FastAPI e sqlAlchemy.
+
